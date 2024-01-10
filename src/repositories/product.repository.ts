@@ -9,18 +9,21 @@ import { UpdateProductDto } from '../modules/product/dto/updateProduct.dto';
 export class ProductRepository {
     constructor(@InjectModel(Product.name) private readonly productModel: Model<Product>) {}
 
-    async createProduct(createProductDto: CreateProductDto, session: ClientSession) {
+    async createProduct(createProductDto: CreateProductDto) {
+
+        console.log("ini dia dto nya ", createProductDto)
+        
         let product = new this.productModel({
-            user: createProductDto.userId,
-            productName: createProductDto.productName,
+            // user: createProductDto.userId,
+            name: createProductDto.name,
             status: 'CREATED',
-            client: null,
+            // client: null,
         });
-        try {
-            product = await product.save({ session });
-        } catch (error) {
-            throw new InternalServerErrorException(error);
-        }
+
+        console.log("ini dia product nya ", product)
+        
+        product = await product.save();
+        console.log("masuk sini", product)
 
         return product;
     }

@@ -9,8 +9,8 @@ import { UpdateProductDto } from './dto/updateProduct.dto';
 export class ProductService {
     constructor(private productRepository: ProductRepository) {}
 
-    async createProduct(createProductDto: CreateProductDto, session: ClientSession) {
-        return await this.productRepository.createProduct(createProductDto, session);
+    async createProduct(createProductDto: CreateProductDto) {
+        return await this.productRepository.createProduct(createProductDto);
     }
 
     async getProductById(productId: MongooseSchema.Types.ObjectId) {

@@ -3,7 +3,7 @@ import { Schema as MongooseSchema } from 'mongoose';
 
 export class CreateProductDto {
     @IsOptional()
-    productName: string;
+    name: string;
     @IsOptional()
     userId: MongooseSchema.Types.ObjectId;
     @IsOptional()
