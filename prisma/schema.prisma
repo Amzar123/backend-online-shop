@@ -1,0 +1,68 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Products {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  price       Float
+  description String
+  image       String
+  categoryId  String     @db.ObjectId
+  category    Categories @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime   @default(now())
+  Orders      Orders[]
+}
+
+model Categories {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  deletedAt DateTime   @default(now())
+  Products  Products[]
+}
+
+model Users {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  password  String
+  address   String
+  phone     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime @default(now())
+  Orders    Orders[]
+}
+
+model Orders {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String        @db.ObjectId
+  user        Users         @relation(fields: [userId], references: [id])
+  productId   String        @db.ObjectId
+  product     Products      @relation(fields: [productId], references: [id])
+  status      String
+  detailOrder DetailOrders?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime      @default(now())
+}
+
+model DetailOrders {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String   @unique @db.ObjectId
+  order     Orders   @relation(fields: [orderId], references: [id])
+  quantity  Int
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime @default(now())
+}
