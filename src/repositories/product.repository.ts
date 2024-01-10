@@ -10,20 +10,15 @@ export class ProductRepository {
     constructor(@InjectModel(Product.name) private readonly productModel: Model<Product>) {}
 
     async createProduct(createProductDto: CreateProductDto) {
-
-        console.log("ini dia dto nya ", createProductDto)
         
         let product = new this.productModel({
-            // user: createProductDto.userId,
             name: createProductDto.name,
-            status: 'CREATED',
-            // client: null,
+            price: createProductDto.price,
+            imageUrl: createProductDto.imageUrl,
+            categoryId: createProductDto.categoryId
         });
-
-        console.log("ini dia product nya ", product)
         
         product = await product.save();
-        console.log("masuk sini", product)
 
         return product;
     }
@@ -33,19 +28,17 @@ export class ProductRepository {
         actualDate.toUTCString();
 
         const updateData = {
-            status: updateProduct.status,
-            client: updateProduct.clientId,
             updatedAt: actualDate,
         };
 
         let product;
         try {
-            product = await this.productModel
-                .findOneAndUpdate({ _id: updateProduct.id }, updateData, {
-                    new: true,
-                })
-                .session(session)
-                .exec();
+            // product = await this.productModel
+            //     .findOneAndUpdate({ _id: updateProduct.id }, updateData, {
+            //         new: true,
+            //     })
+            //     .session(session)
+            //     .exec();
         } catch (error) {
             throw new InternalServerErrorException(error);
         }
@@ -70,16 +63,12 @@ export class ProductRepository {
             if (limit === 0) {
                 products = await this.productModel
                     .find()
-                    .populate('client')
-                    .populate('user', 'name email')
                     .skip(from)
                     .sort({ createdAt: -1 })
                     .exec();
             } else {
                 products = await this.productModel
                     .find()
-                    .populate('client')
-                    .populate('user', 'name email')
                     .skip(from)
                     .limit(limit)
                     .sort({ createdAt: -1 })

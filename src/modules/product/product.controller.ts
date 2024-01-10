@@ -7,11 +7,11 @@ import { CreateProductDto } from './dto/createProduct.dto';
 import { UpdateProductDto } from './dto/updateProduct.dto';
 import { GetQueryDto } from 'src/dto/getQueryDto';
 
-@Controller('product')
+@Controller('products')
 export class ProductController {
     constructor(@InjectConnection() private readonly mongoConnection: Connection, private productService: ProductService) {}
 
-    @Post('/createProduct')
+    @Post('/one')
     async createProduct(@Body() createProductDto: CreateProductDto, @Res() res: Response) {
         try {
             const newProduct: any = await this.productService.createProduct(createProductDto);
@@ -21,7 +21,7 @@ export class ProductController {
         }
     }
 
-    @Put('/updateProduct/:id')
+    @Put('/update/:id')
     async updateProduct(@Param('id') id: MongooseSchema.Types.ObjectId, @Body() updateProductDto: UpdateProductDto, @Res() res: Response) {
         const session = await this.mongoConnection.startSession();
         session.startTransaction();
@@ -37,13 +37,13 @@ export class ProductController {
         }
     }
 
-    @Get('/getProductById/:id')
+    @Get('/:id')
     async getProductById(@Param('id') id: MongooseSchema.Types.ObjectId, @Res() res: Response) {
         const storage: any = await this.productService.getProductById(id);
         return res.status(HttpStatus.OK).send(storage);
     }
 
-    @Get('/getProducts')
+    @Get()
     async getAllProducts(@Query() getQueryDto: GetQueryDto, @Res() res: any) {
         const storages: any = await this.productService.getProducts(getQueryDto);
         return res.status(HttpStatus.OK).send(storages);
