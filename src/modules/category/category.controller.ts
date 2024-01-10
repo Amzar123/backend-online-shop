@@ -1,9 +1,10 @@
-import { Controller, Post, Body, Res, HttpStatus, BadRequestException } from "@nestjs/common";
+import { Controller, Post, Body, Res, HttpStatus, BadRequestException, Get, Param } from "@nestjs/common";
 import { InjectConnection } from "@nestjs/mongoose";
-import { Connection } from "mongoose";
+import { Connection, Types } from "mongoose";
 import { CategoryService } from "./category.service";
 import { CreateCategoryDto } from "./dto/createProduct.dto";
 import { Response } from 'express';
+import { Schema as MongooseSchema } from 'mongoose';
 
 @Controller('categories')
 export class CategoryController {
@@ -35,11 +36,11 @@ export class CategoryController {
     //     }
     // }
 
-    // @Get('/:id')
-    // async getProductById(@Param('id') id: MongooseSchema.Types.ObjectId, @Res() res: Response) {
-    //     const storage: any = await this.productService.getProductById(id);
-    //     return res.status(HttpStatus.OK).send(storage);
-    // }
+    @Get('/:id')
+    async getProductById(@Param('id') id: Types.ObjectId, @Res() res: Response) {
+        const storage: any = await this.categoryService.getCategoryById(id);
+        return res.status(HttpStatus.OK).send(storage);
+    }
 
     // @Get()
     // async getAllProducts(@Query() getQueryDto: GetQueryDto, @Res() res: any) {

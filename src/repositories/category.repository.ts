@@ -1,8 +1,6 @@
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Schema as MongooseSchema, Types } from "mongoose";
 import { Category } from "src/entities/category.entity";
-import { Product } from "src/entities/product.entity";
-import { CreateProductDto } from "src/modules/product/dto/createProduct.dto";
 
 export class CategoryRepository {
     constructor(@InjectModel(Category.name) private readonly categoryModel: Model<Category>) {}
@@ -16,6 +14,11 @@ export class CategoryRepository {
         product = await product.save();
 
         return product;
+    }
+
+    async getOneById(id: Types.ObjectId) {
+        const product = await this.categoryModel.findOne(id)
+        return product
     }
 
     // async getProducts(query: GetQueryDto) {
