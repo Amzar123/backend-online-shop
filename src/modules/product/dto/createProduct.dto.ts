@@ -1,5 +1,4 @@
 import { IsOptional } from 'class-validator';
-import { Schema as MongooseSchema } from 'mongoose';
 
 export class CreateProductDto {
     name: string;

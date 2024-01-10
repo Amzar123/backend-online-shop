@@ -14,6 +14,7 @@ export class ProductRepository {
         let product = new this.productModel({
             name: createProductDto.name,
             price: createProductDto.price,
+            description: createProductDto.description,
             imageUrl: createProductDto.imageUrl,
             categoryId: createProductDto.categoryId
         });

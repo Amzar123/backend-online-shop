@@ -6,6 +6,7 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/createProduct.dto';
 import { UpdateProductDto } from './dto/updateProduct.dto';
 import { GetQueryDto } from 'src/dto/getQueryDto';
+import { CategoryService } from '../category/category.service';
 
 @Controller('products')
 export class ProductController {
