@@ -2,7 +2,7 @@ import { Controller, Post, Body, Res, HttpStatus, BadRequestException, Get, Para
 import { InjectConnection } from "@nestjs/mongoose";
 import { Connection, Types } from "mongoose";
 import { CategoryService } from "./category.service";
-import { CreateCategoryDto } from "./dto/createProduct.dto";
+import { CreateCategoryDto } from "./dto/createCategory.dto";
 import { Response } from 'express';
 import { Schema as MongooseSchema } from 'mongoose';
 

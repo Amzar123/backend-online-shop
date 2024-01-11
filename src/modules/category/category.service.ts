@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { CategoryRepository } from "src/repositories/category.repository";
-import { CreateCategoryDto } from "./dto/createProduct.dto";
+import { CreateCategoryDto } from "./dto/createCategory.dto";
 import { Schema as MongooseSchema, Types } from "mongoose";
 
 @Injectable()
