@@ -24,22 +24,25 @@ export class ProductRepository {
         return product;
     }
 
-    async updateProduct(updateProduct: UpdateProductDto, session: ClientSession) {
+    async updateProduct(id: string, updateProduct: UpdateProductDto) {
         const actualDate = new Date();
         actualDate.toUTCString();
 
         const updateData = {
+            name: updateProduct.name,
+            price: updateProduct.price,
+            description: updateProduct.description,
+            imageUrl: updateProduct.imageUrl,
             updatedAt: actualDate,
         };
 
         let product;
         try {
-            // product = await this.productModel
-            //     .findOneAndUpdate({ _id: updateProduct.id }, updateData, {
-            //         new: true,
-            //     })
-            //     .session(session)
-            //     .exec();
+            product = await this.productModel
+                .findOneAndUpdate({ _id: id }, updateData, {
+                    new: true,
+                })
+                .exec();
         } catch (error) {
             throw new InternalServerErrorException(error);
         }

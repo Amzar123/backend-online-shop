@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Put, Query, Res } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Response } from 'express';
 import { Connection, Schema as MongooseSchema } from 'mongoose';
@@ -40,19 +40,13 @@ export class ProductController {
         }
     }
 
-    @Put('/update/:id')
-    async updateProduct(@Body() updateProductDto: UpdateProductDto, @Res() res: Response) {
-        const session = await this.mongoConnection.startSession();
-        session.startTransaction();
+    @Patch('/:id')
+    async updateProduct(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto, @Res() res: Response) {
         try {
-            const newProduct: any = await this.productService.updateProduct(updateProductDto, session);
-            await session.commitTransaction();
+            const newProduct: any = await this.productService.updateProduct(id, updateProductDto);
             return res.status(HttpStatus.OK).send(newProduct);
         } catch (error) {
-            await session.abortTransaction();
             throw new BadRequestException(error);
-        } finally {
-            session.endSession();
         }
     }
 
