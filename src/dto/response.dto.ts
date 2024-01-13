@@ -1,15 +1,15 @@
 export class ResponseDto {
-    ok: boolean;
+    code: number;
     data?: any;
     message?: string;
     error?: any;
-    nTotal?: number;
+    total?: number;
 
     constructor(response: ResponseDto) {
-        this.ok = response.ok;
+        this.code = response.code;
         this.data = response.data;
         this.message = response.message;
         this.error = response.error;
-        this.nTotal = response.nTotal;
+        this.total = response.total;
     }
 }
