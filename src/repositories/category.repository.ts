@@ -1,5 +1,7 @@
+import { InternalServerErrorException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Schema as MongooseSchema, Types } from "mongoose";
+import { GetQueryDto } from "src/dto/getQueryDto";
 import { Category } from "src/entities/category.entity";
 
 export class CategoryRepository {
@@ -16,54 +18,39 @@ export class CategoryRepository {
         return product;
     }
 
-    async getOneById(id: Types.ObjectId) {
-        const product = await this.categoryModel.findOne(id)
+    async getOneById(id: string) {
+        const product = await this.categoryModel.findById(id)
         return product
     }
 
-    // async getProducts(query: GetQueryDto) {
-    //     let from = query.from || 0;
-    //     from = Number(from);
+    async getCategories(query: GetQueryDto) {
+        let from = query.from || 0;
+        from = Number(from);
 
-    //     let limit = query.limit || 0;
-    //     limit = Number(limit);
+        let limit = query.limit || 0;
+        limit = Number(limit);
 
-    //     let products: Product[];
+        let categories: Category[];
 
-    //     try {
-    //         if (limit === 0) {
-    //             products = await this.productModel
-    //                 .find()
-    //                 .skip(from)
-    //                 .sort({ createdAt: -1 })
-    //                 .exec();
-    //         } else {
-    //             products = await this.productModel
-    //                 .find()
-    //                 .skip(from)
-    //                 .limit(limit)
-    //                 .sort({ createdAt: -1 })
-    //                 .exec();
-    //         }
+        try {
+            if (limit === 0) {
+                categories = await this.categoryModel
+                    .find()
+                    .skip(from)
+                    .sort({ createdAt: -1 })
+                    .exec();
+            } else {
+                categories = await this.categoryModel
+                    .find()
+                    .skip(from)
+                    .limit(limit)
+                    .sort({ createdAt: -1 })
+                    .exec();
+            }
 
-    //         let response;
-
-    //         if (products.length > 0) {
-    //             response = {
-    //                 ok: true,
-    //                 data: products,
-    //                 message: 'Get Products Ok!',
-    //             };
-    //         } else {
-    //             response = {
-    //                 ok: true,
-    //                 data: [],
-    //                 message: 'No hay products',
-    //             };
-    //         }
-    //         return response;
-    //     } catch (error) {
-    //         throw new InternalServerErrorException(error);
-    //     }
-    // }
+            return categories;
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
+    }
 }

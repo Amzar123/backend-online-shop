@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CategoryRepository } from "src/repositories/category.repository";
 import { CreateCategoryDto } from "./dto/createCategory.dto";
 import { Schema as MongooseSchema, Types } from "mongoose";
+import { GetQueryDto } from "src/dto/getQueryDto";
 
 @Injectable()
 export class CategoryService {
@@ -11,11 +12,11 @@ export class CategoryService {
         return await this.categoryRepo.createCategory(createCategoryDto);
     }
 
-    // async getCategory(getQueryDto: GetQueryDto) {
-    //     return await this.categoryRepo.createCategory(getQueryDto);
-    // }
+    async getCategories(getQueryDto: GetQueryDto) {
+        return await this.categoryRepo.getCategories(getQueryDto);
+    }
 
-    async getCategoryById(id) {
+    async getCategoryById(id: string) {
         return await this.categoryRepo.getOneById(id);
     }
 }

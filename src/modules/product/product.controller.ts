@@ -24,9 +24,8 @@ export class ProductController {
     async createProduct(@Body() createProductDto: CreateProductDto, @Res() res: Response) {
 
         try {
-            const objectID = new Types.ObjectId(createProductDto.categoryId);
             // check if category is exist
-            const category = await this.categoryService.getCategoryById(objectID);
+            const category = await this.categoryService.getCategoryById(createProductDto.categoryId);
             if (!category) {
                 const responseObject: ResponseDto = new ResponseDto({
                     code: HttpStatus.NOT_FOUND,
