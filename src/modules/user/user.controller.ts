@@ -1,19 +1,56 @@
-import { Controller, Post, Body, Res, BadRequestException } from "@nestjs/common";
+import { Controller, Post, Body, Res, BadRequestException, Get, Query, Patch, Param } from "@nestjs/common";
 import { InjectConnection } from "@nestjs/mongoose";
-import { Connection } from "mongoose";
-import { Response } from 'express';
+import { Connection } from 'mongoose';
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/createUser.dto";
+import { ResponseDto } from "src/dto/response.dto";
+import { GetQueryDto } from "src/dto/getQueryDto";
+import { UpdateUserDto } from "./dto/updateUser.dto";
 
 @Controller('users')
 export class UserController {
     constructor(@InjectConnection() private readonly mongoConnection: Connection, private userService: UserService) {}
 
     @Post('/one')
-    async createUser(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+    async createUser(@Body() createUserDto: CreateUserDto, @Res() res) {
         try {
-            const order: any = await this.userService.createUser(createUserDto);
-            return res.status(200).send(order)
+            const user: any = await this.userService.createUser(createUserDto);
+            const responseObject: ResponseDto = new ResponseDto({
+                ok: true,
+                data: user,
+              });
+        
+              return res.status(200).json(responseObject);        
+        } catch (error) {
+            throw new BadRequestException(error);
+        }
+    }
+
+    @Get()
+    async getUser(@Query() getQueryDto: GetQueryDto, @Res() res) {
+        try {
+            const user: any = await this.userService.getUsers(getQueryDto);
+            const responseObject: ResponseDto = new ResponseDto({
+                ok: true,
+                data: user,
+              });
+        
+              return res.status(200).json(responseObject);        
+        } catch (error) {
+            throw new BadRequestException(error);
+        }
+    }
+
+    @Patch("/one/:id")
+    async updateUser(@Param('id') id: string, @Body() updateUser: UpdateUserDto, @Res() res) {
+        try {
+            const user: any = await this.userService.updateUser(id, updateUser);
+            const responseObject: ResponseDto = new ResponseDto({
+                ok: true,
+                data: user,
+              });
+        
+              return res.status(200).json(responseObject);  
         } catch (error) {
             throw new BadRequestException(error);
         }

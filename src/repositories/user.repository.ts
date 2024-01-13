@@ -1,11 +1,13 @@
+import { ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Product } from '../entities/product.entity';
+import { ClientSession, Model, Schema as MongooseSchema, Types } from 'mongoose';
+import { GetQueryDto } from 'src/dto/getQueryDto';
 import { User } from 'src/entities/user.entity';
 import { CreateUserDto } from 'src/modules/user/dto/createUser.dto';
+import { UpdateUserDto } from 'src/modules/user/dto/updateUser.dto';
 
 export class UserRepository {
-    constructor(@InjectModel(Product.name) private readonly userModel: Model<User>) {}
+    constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
 
     async createUser(createUserDto: CreateUserDto) {
         
@@ -21,78 +23,66 @@ export class UserRepository {
         return user;
     }
 
-    // async updateProduct(updateProduct: UpdateProductDto, session: ClientSession) {
-    //     const actualDate = new Date();
-    //     actualDate.toUTCString();
+    async updateUser(id: string, updateUser: UpdateUserDto) {
+        const actualDate = new Date();
+        actualDate.toUTCString();
 
-    //     const updateData = {
-    //         updatedAt: actualDate,
-    //     };
+        const updateData = {
+            name: updateUser.name,
+            email : updateUser.email,
+            address : updateUser.address,
+            phone: updateUser.phone,
+            updatedAt: actualDate,
+        };
 
-    //     let product;
-    //     try {
-    //         // product = await this.productModel
-    //         //     .findOneAndUpdate({ _id: updateProduct.id }, updateData, {
-    //         //         new: true,
-    //         //     })
-    //         //     .session(session)
-    //         //     .exec();
-    //     } catch (error) {
-    //         throw new InternalServerErrorException(error);
-    //     }
+        let user;
+        try {
+            user = await this.userModel
+                .findOneAndUpdate({ _id: id }, updateData, {
+                    new: true,
+                })
+                .exec();
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
 
-    //     if (!product) {
-    //         throw new ConflictException('Error trying to update product');
-    //     }
+        if (!user) {
+            throw new ConflictException('Error trying to update user');
+        }
 
-    //     return product;
-    // }
+        return user;
+    }
 
-    // async getProducts(query: GetQueryDto) {
-    //     let from = query.from || 0;
-    //     from = Number(from);
+    async getUsers(query: GetQueryDto) {
+        let from = query.from || 0;
+        from = Number(from);
 
-    //     let limit = query.limit || 0;
-    //     limit = Number(limit);
+        let limit = query.limit || 0;
+        limit = Number(limit);
 
-    //     let products: Product[];
+        let users: User[];
 
-    //     try {
-    //         if (limit === 0) {
-    //             products = await this.productModel
-    //                 .find()
-    //                 .skip(from)
-    //                 .sort({ createdAt: -1 })
-    //                 .exec();
-    //         } else {
-    //             products = await this.productModel
-    //                 .find()
-    //                 .skip(from)
-    //                 .limit(limit)
-    //                 .sort({ createdAt: -1 })
-    //                 .exec();
-    //         }
+        try {
+            if (limit === 0) {
+                users = await this.userModel
+                    .find()
+                    .skip(from)
+                    .sort({ createdAt: -1 })
+                    .exec();
+            } else {
+                users = await this.userModel
+                    .find()
+                    .skip(from)
+                    .limit(limit)
+                    .sort({ createdAt: -1 })
+                    .exec();
+            }
 
-    //         let response;
-
-    //         if (products.length > 0) {
-    //             response = {
-    //                 ok: true,
-    //                 data: products,
-    //                 message: 'Get Products Ok!',
-    //             };
-    //         } else {
-    //             response = {
-    //                 ok: true,
-    //                 data: [],
-    //                 message: 'No hay products',
-    //             };
-    //         }
-    //         return response;
-    //     } catch (error) {
-    //         throw new InternalServerErrorException(error);
-    //     }
-    // }
+            return users
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
+    }
 
     // async getProductById(id: MongooseSchema.Types.ObjectId) {
     //     let product;
