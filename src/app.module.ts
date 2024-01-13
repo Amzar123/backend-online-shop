@@ -6,6 +6,7 @@ import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { ProductModule } from './modules/product/product.module';
 import { CategoryModule } from './modules/category/category.module';
+import { OrderModule } from './modules/order/order.module';
 
 
 @Module({
@@ -18,6 +19,7 @@ import { CategoryModule } from './modules/category/category.module';
     }),
     ProductModule,
     CategoryModule,
+    OrderModule
   ],
   controllers: [AppController],
   providers: [AppService],
