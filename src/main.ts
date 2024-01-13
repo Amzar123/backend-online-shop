@@ -7,9 +7,9 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Toko online')
-    .setDescription('The cats API description')
+    .setDescription('Toko Online API documentation')
     .setVersion('1.0')
-    .addTag('cats')
+    .addTag('Toko Online')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
