@@ -24,4 +24,8 @@ export class ProductService {
     async updateProduct(updateProductDto: UpdateProductDto, session: ClientSession) {
         return await this.productRepository.updateProduct(updateProductDto, session);
     }
+
+    async deleteProductId(productId: MongooseSchema.Types.ObjectId) {
+        return await this.productRepository.deleteProduct(productId);
+    }
 }

@@ -111,4 +111,10 @@ export class ProductRepository {
 
         return product;
     }
+
+    // delete product 
+    async deleteProduct(id: MongooseSchema.Types.ObjectId) {
+        console.log("ini duaa hueuhe", id)
+        return await this.productModel.deleteOne({ _id: id }).exec();
+    }
 }

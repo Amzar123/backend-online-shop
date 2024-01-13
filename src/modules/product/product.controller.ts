@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, HttpStatus, Param, Post, Put, Query, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Response } from 'express';
 import { Connection, Schema as MongooseSchema } from 'mongoose';
@@ -66,5 +66,12 @@ export class ProductController {
     async getAllProducts(@Query() getQueryDto: GetQueryDto, @Res() res: any) {
         const storages: any = await this.productService.getProducts(getQueryDto);
         return res.status(HttpStatus.OK).send(storages);
+    }
+
+    @Delete('/:id')
+    async deleteProductById(@Param('id') id: MongooseSchema.Types.ObjectId, @Res() res: Response) {
+        console.log("masuk sini gasih")
+        const storage: any = await this.productService.deleteProductId(id);
+        return res.status(HttpStatus.OK).send(storage);
     }
 }
