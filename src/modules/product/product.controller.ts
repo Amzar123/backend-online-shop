@@ -9,6 +9,7 @@ import { GetQueryDto } from 'src/dto/getQueryDto';
 import { CategoryService } from '../category/category.service';
 import { Types } from 'mongoose';
 import { ResponseDto } from 'src/dto/response.dto';
+import { ApiParam } from '@nestjs/swagger';
 
 @Controller('products')
 export class ProductController {
@@ -50,6 +51,7 @@ export class ProductController {
     }
 
     @Patch('/:id')
+    @ApiParam({ name: 'id', description: 'Product ID', type: String })
     async updateProduct(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto, @Res() res: Response) {
         try {
             const newProduct: any = await this.productService.updateProduct(id, updateProductDto);

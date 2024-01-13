@@ -6,13 +6,14 @@ import { CreateUserDto } from "./dto/createUser.dto";
 import { ResponseDto } from "src/dto/response.dto";
 import { GetQueryDto } from "src/dto/getQueryDto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
+import { Response } from "express";
 
 @Controller('users')
 export class UserController {
     constructor(@InjectConnection() private readonly mongoConnection: Connection, private userService: UserService) {}
 
     @Post('/one')
-    async createUser(@Body() createUserDto: CreateUserDto, @Res() res) {
+    async createUser(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
         try {
             const user: any = await this.userService.createUser(createUserDto);
             const responseObject: ResponseDto = new ResponseDto({
