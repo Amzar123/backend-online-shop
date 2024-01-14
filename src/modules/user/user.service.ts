@@ -21,7 +21,7 @@ export class UserService {
         return await this.userRepo.updateUser(id, updateUser);
     }
 
-    // async getCategoryById(id) {
-    //     return await this.categoryRepo.getOneById(id);
-    // }
+    async getUserById(id: string) {
+        return await this.userRepo.getUserById(id);
+    }
 }

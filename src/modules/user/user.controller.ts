@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Res, BadRequestException, Get, Query, Patch, Param, HttpCode, HttpStatus } from "@nestjs/common";
-import { InjectConnection } from "@nestjs/mongoose";
+import { InjectConnection, Schema as MongooseSchema } from "@nestjs/mongoose";
 import { Connection } from 'mongoose';
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/createUser.dto";
@@ -55,11 +55,21 @@ export class UserController {
                 message: "success update users",
               });
         
-            return res.status(200).json(responseObject);   
-        
-              return res.status(200).json(responseObject);  
+            return res.status(200).json(responseObject);
         } catch (error) {
             throw new BadRequestException(error);
         }
+    }
+
+    @Get('/:id')
+    async getUserById(@Param('id') id: string, @Res() res: Response) {
+        const user: any = await this.userService.getUserById(id);
+        const responseObject: ResponseDto = new ResponseDto({
+            code: HttpStatus.OK,
+            data: user,
+            message: "success get user"
+          });
+    
+        return res.status(200).json(responseObject);  
     }
 }

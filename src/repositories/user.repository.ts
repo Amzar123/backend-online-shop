@@ -1,4 +1,4 @@
-import { ConflictException, InternalServerErrorException } from '@nestjs/common';
+import { ConflictException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ClientSession, Model, Schema as MongooseSchema, Types } from 'mongoose';
 import { GetQueryDto } from 'src/dto/getQueryDto';
@@ -84,18 +84,18 @@ export class UserRepository {
         }
     }
 
-    // async getProductById(id: MongooseSchema.Types.ObjectId) {
-    //     let product;
-    //     try {
-    //         product = await this.productModel.findById(id).exec();
-    //     } catch (error) {
-    //         throw new InternalServerErrorException(error);
-    //     }
+    async getUserById(id: string) {
+        let product;
+        try {
+            product = await this.userModel.findById(id).exec();
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
 
-    //     if (!product) {
-    //         throw new NotFoundException('The product with this id does not exist');
-    //     }
+        if (!product) {
+            throw new NotFoundException('The product with this id does not exist');
+        }
 
-    //     return product;
-    // }
+        return product;
+    }
 }
